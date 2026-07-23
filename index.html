@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[23.07.2026 18:34] Arts1om: <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -6,84 +6,226 @@
     <title>Подбор авто из США</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #f5f5f7);
-            color: var(--tg-theme-text-color, #222);
-            padding: 15px;
-            margin: 0;
+            background-color: var(--tg-theme-bg-color, #f4f4f7);
+            color: var(--tg-theme-text-color, #222222);
+            padding: 16px;
+            line-height: 1.4;
         }
+
         h2 {
             text-align: center;
-            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--tg-theme-text-color, #111111);
         }
+
+        /* Контейнер фильтров */
+        .filter-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            background-color: var(--tg-theme-secondary-bg-color, #e5e5ea);
+            color: var(--tg-theme-text-color, #333333);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background-color: var(--tg-theme-button-color, #0088cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        /* Список автомобилей */
+        .cars-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Карточка автомобиля */
         .car-card {
             background: var(--tg-theme-secondary-bg-color, #ffffff);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             display: flex;
             flex-direction: column;
             gap: 8px;
+            transition: transform 0.1s ease;
         }
+
+        .car-card:active {
+            transform: scale(0.99);
+        }
+
+        .car-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .car-title {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--tg-theme-text-color, #111111);
         }
+
         .car-price {
-            font-size: 16px;
-            color: #007aff;
+            font-size: 15px;
+            color: var(--tg-theme-link-color, #007aff);
             font-weight: 600;
         }
+
         .btn-select {
             background-color: var(--tg-theme-button-color, #0088cc);
             color: var(--tg-theme-button-text-color, #ffffff);
             border: none;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 15px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 5px;
+            margin-top: 4px;
+            text-align: center;
+            width: 100%;
+            transition: opacity 0.2s ease;
         }
+
         .btn-select:active {
-            opacity: 0.8;
+            opacity: 0.85;
         }
     </style>
 </head>
 <body>
 
-    <h2>🚗 Доступные авто под заказ</h2>
+    <h2>🚗 Каталог авто из США</h2>
 
-    <div class="car-card">
-        <div class="car-title">Ford Mustang 2.0 EcoBoost</div>
-        <div class="car-price">Цена: $13,500</div>
-        <button class="btn-select" onclick="selectCar('Ford Mustang 2.0 EcoBoost', '13500')">Выбрать авто</button>
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterCars('all', this)">Все</button>
+        <button class="filter-btn" onclick="filterCars('budget', this)">До $12,000</button>
+        <button class="filter-btn" onclick="filterCars('mid', this)">$12k - $20k</button>
+        <button class="filter-btn" onclick="filterCars('premium', this)">От $20,000</button>
     </div>
 
-    <div class="car-card">
-        <div class="car-title">BMW 320i (G20)</div>
-        <div class="car-price">Цена: $18,200</div>
-        <button class="btn-select" onclick="selectCar('BMW 320i (G20)', '18200')">Выбрать авто</button>
-    </div>
+    <div class="cars-list" id="cars-list">
+        
+        <div class="car-card" data-category="budget">
+            <div class="car-header">
+                <div class="car-title">Chevrolet Cruze 1.4T</div>
+[23.07.2026 18:34] Arts1om: </div>
+            <div class="car-price">Бюджет: ~$8,500</div>
+            <button class="btn-select" onclick="selectCar('Chevrolet Cruze 1.4T', '8500')">Выбрать авто</button>
+        </div>
 
-    <div class="car-card">
-        <div class="car-title">Audi A5 Sportback</div>
-        <div class="car-price">Цена: $21,000</div>
-        <button class="btn-select" onclick="selectCar('Audi A5 Sportback', '21000')">Выбрать авто</button>
+        <div class="car-card" data-category="budget">
+            <div class="car-header">
+                <div class="car-title">Ford Focus SE</div>
+            </div>
+            <div class="car-price">Бюджет: ~$9,200</div>
+            <button class="btn-select" onclick="selectCar('Ford Focus SE', '9200')">Выбрать авто</button>
+        </div>
+
+        <div class="car-card" data-category="budget">
+            <div class="car-header">
+                <div class="car-title">Chevrolet Malibu 1.5T</div>
+            </div>
+            <div class="car-price">Бюджет: ~$11,200</div>
+            <button class="btn-select" onclick="selectCar('Chevrolet Malibu 1.5T', '11200')">Выбрать авто</button>
+        </div>
+
+        <div class="car-card" data-category="mid">
+            <div class="car-header">
+                <div class="car-title">Ford Mustang 2.0 EcoBoost</div>
+            </div>
+            <div class="car-price">Бюджет: ~$13,500</div>
+            <button class="btn-select" onclick="selectCar('Ford Mustang 2.0 EcoBoost', '13500')">Выбрать авто</button>
+        </div>
+
+        <div class="car-card" data-category="mid">
+            <div class="car-header">
+                <div class="car-title">Honda Civic 1.5 Turbo</div>
+            </div>
+            <div class="car-price">Бюджет: ~$14,800</div>
+            <button class="btn-select" onclick="selectCar('Honda Civic 1.5 Turbo', '14800')">Выбрать авто</button>
+        </div>
+
+        <div class="car-card" data-category="mid">
+            <div class="car-header">
+                <div class="car-title">BMW 320i (G20)</div>
+            </div>
+            <div class="car-price">Бюджет: ~$18,200</div>
+            <button class="btn-select" onclick="selectCar('BMW 320i (G20)', '18200')">Выбрать авто</button>
+        </div>
+
+        <div class="car-card" data-category="premium">
+            <div class="car-header">
+                <div class="car-title">Audi A5 Sportback</div>
+            </div>
+            <div class="car-price">Бюджет: ~$21,000</div>
+            <button class="btn-select" onclick="selectCar('Audi A5 Sportback', '21000')">Выбрать авто</button>
+        </div>
+
+        <div class="car-card" data-category="premium">
+            <div class="car-header">
+                <div class="car-title">BMW 530i (G30)</div>
+            </div>
+            <div class="car-price">Бюджет: ~$24,500</div>
+            <button class="btn-select" onclick="selectCar('BMW 530i (G30)', '24500')">Выбрать авто</button>
+        </div>
+
     </div>
 
     <script>
+        // Инициализация Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Раскрываем окно на полную высоту
+        tg.expand(); // Разворачиваем на всю высоту
 
+        // Фильтрация карточек
+        function filterCars(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const cards = document.querySelectorAll('.car-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Отправка выбранного авто в бот
         function selectCar(carName, price) {
             const data = {
                 car: carName,
                 price: price
             };
-            // Отправляем данные обратно боту
             tg.sendData(JSON.stringify(data));
         }
     </script>
