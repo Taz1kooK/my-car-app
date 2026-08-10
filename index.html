@@ -1,231 +1,142 @@
-[23.07.2026 19:02] Arts1om: <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Подбор авто из США</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+<div class="cars-list" id="cars-list">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #f4f4f7);
-            color: var(--tg-theme-text-color, #222222);
-            padding: 16px;
-            line-height: 1.4;
-        }
-
-        h2 {
-            text-align: center;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--tg-theme-text-color, #111111);
-        }
-
-        .filter-container {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 16px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .filter-container::-webkit-scrollbar { display: none; }
-
-        .filter-btn {
-            background-color: var(--tg-theme-secondary-bg-color, #e5e5ea);
-            color: var(--tg-theme-text-color, #333333);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .filter-btn.active {
-            background-color: var(--tg-theme-button-color, #0088cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
-        }
-
-        .cars-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .car-card {
-            background: var(--tg-theme-secondary-bg-color, #ffffff);
-            border-radius: 14px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .car-title { font-size: 16px; font-weight: 700; }
-        .car-price { font-size: 14px; color: var(--tg-theme-link-color, #007aff); font-weight: 600; }
-
-        .btn-select {
-            background-color: var(--tg-theme-button-color, #0088cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-        }
-        .btn-select:active { opacity: 0.85; }
-    </style>
-</head>
-<body>
-
-    <h2>🚗 Каталог авто из США</h2>
-
-    <div class="filter-container">
-        <button class="filter-btn active" onclick="filterCars('all', this)">Все</button>
-        <button class="filter-btn" onclick="filterCars('budget', this)">До $12,000</button>
-        <button class="filter-btn" onclick="filterCars('mid', this)">$12k - $20k</button>
-        <button class="filter-btn" onclick="filterCars('premium', this)">От $20,000</button>
+    <!-- ================= БЮДЖЕТНЫЕ (До $12,000) ================= -->
+    <div class="car-card" data-category="budget">
+        <div class="car-header"><div class="car-title">Chevrolet Cruze (Дорестайл)</div></div>
+        <div class="car-price">Бюджет: ~$8,500</div>
+        <button class="btn-select" onclick="selectCar('Chevrolet Cruze Дорестайл', '8500')">Выбрать авто</button>
     </div>
 
-    <div class="cars-list" id="cars-list">
-        
-        <!-- ================= БЮДЖЕТ (До $12,000) ================= -->
-        <div class="car-card" data-category="budget">
-            <div class="car-title">Chevrolet Malibu 1.5T</div>
-            <div class="car-price">Бюджет: ~$10,500</div>
-            <button class="btn-select" onclick="selectCar('Chevrolet Malibu', '10500')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="budget">
-            <div class="car-title">Chevrolet Equinox 1.5T</div>
-            <div class="car-price">Бюджет: ~$11,200</div>
-            <button class="btn-select" onclick="selectCar('Chevrolet Equinox', '11200')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="budget">
-            <div class="car-title">Volkswagen Jetta VII</div>
-            <div class="car-price">Бюджет: ~$10,800</div>
-[23.07.2026 19:02] Arts1om: <button class="btn-select" onclick="selectCar('Volkswagen Jetta', '10800')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="budget">
-            <div class="car-title">Volkswagen Golf VII/VIII</div>
-            <div class="car-price">Бюджет: ~$11,500</div>
-            <button class="btn-select" onclick="selectCar('Volkswagen Golf', '11500')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="budget">
-            <div class="car-title">Volkswagen Taos 1.5T</div>
-            <div class="car-price">Бюджет: ~$11,900</div>
-            <button class="btn-select" onclick="selectCar('Volkswagen Taos', '11900')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="budget">
-            <div class="car-title">Kia K5 (Optima)</div>
-            <div class="car-price">Бюджет: ~$11,800</div>
-            <button class="btn-select" onclick="selectCar('Kia K5', '11800')">Выбрать авто</button>
-        </div>
-
-        <!-- ================= СРЕДНИЙ ($12,000 - $20,000) ================= -->
-        <div class="car-card" data-category="mid">
-            <div class="car-title">GMC Terrain II (Дорестайлинг)</div>
-            <div class="car-price">Бюджет: ~$12,500</div>
-            <button class="btn-select" onclick="selectCar('GMC Terrain II Дорестайл', '12500')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">GMC Terrain II (Рестайлинг)</div>
-            <div class="car-price">Бюджет: ~$16,800</div>
-            <button class="btn-select" onclick="selectCar('GMC Terrain II Рестайл', '16800')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">GMC Acadia II</div>
-            <div class="car-price">Бюджет: ~$15,500</div>
-            <button class="btn-select" onclick="selectCar('GMC Acadia II', '15500')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">Volkswagen Tiguan II</div>
-            <div class="car-price">Бюджет: ~$13,800</div>
-            <button class="btn-select" onclick="selectCar('Volkswagen Tiguan', '13800')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">Volkswagen Atlas / Teramont</div>
-            <div class="car-price">Бюджет: ~$18,500</div>
-            <button class="btn-select" onclick="selectCar('Volkswagen Atlas', '18500')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">Kia Stinger GT</div>
-            <div class="car-price">Бюджет: ~$17,200</div>
-            <button class="btn-select" onclick="selectCar('Kia Stinger', '17200')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">Hyundai Sonata / Tucson / Santa Fe</div>
-            <div class="car-price">Бюджет: ~$13,500</div>
-            <button class="btn-select" onclick="selectCar('Hyundai', '13500')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">Audi A5 / Q3 / Q5</div>
-            <div class="car-price">Бюджет: ~$18,900</div>
-            <button class="btn-select" onclick="selectCar('Audi A5/Q5', '18900')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">BMW 3 / 4 / X1 / X3</div>
-            <div class="car-price">Бюджет: ~$18,200</div>
-            <button class="btn-select" onclick="selectCar('BMW 3/4/X3', '18200')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="mid">
-            <div class="car-title">Tesla Model 3</div>
-            <div class="car-price">Бюджет: ~$17,500</div>
-            <button class="btn-select" onclick="selectCar('Tesla Model 3', '17500')">Выбрать авто</button>
-        </div>
-[23.07.2026 19:02] Arts1om: <!-- ================= ПРЕМИУМ (От $20,000) ================= -->
-        <div class="car-card" data-category="premium">
-            <div class="car-title">Audi S5 / RS5</div>
-            <div class="car-price">Бюджет: ~$26,000</div>
-            <button class="btn-select" onclick="selectCar('Audi S5/RS5', '26000')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="premium">
-            <div class="car-title">Audi Q7 / Q8</div>
-            <div class="car-price">Бюджет: ~$28,500</div>
-            <button class="btn-select" onclick="selectCar('Audi Q7/Q8', '28500')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="premium">
-            <div class="car-title">BMW 5 / 7 / X5 / X6 / X7</div>
-            <div class="car-price">Бюджет: ~$25,000</div>
-            <button class="btn-select" onclick="selectCar('BMW 5/X5/X6', '25000')">Выбрать авто</button>
-        </div>
-        <div class="car-card" data-category="premium">
-            <div class="car-title">Tesla Model Y / Model S / Model X</div>
-            <div class="car-price">Бюджет: ~$23,500</div>
-            <button class="btn-select" onclick="selectCar('Tesla Model Y/S/X', '23500')">Выбрать авто</button>
-        </div>
-
+    <div class="car-card" data-category="budget">
+        <div class="car-header"><div class="car-title">Chevrolet Cruze (Рестайлинг)</div></div>
+        <div class="car-price">Бюджет: ~$10,500</div>
+        <button class="btn-select" onclick="selectCar('Chevrolet Cruze Рестайлинг', '10500')">Выбрать авто</button>
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+    <div class="car-card" data-category="budget">
+        <div class="car-header"><div class="car-title">Ford Focus SE / SEL</div></div>
+        <div class="car-price">Бюджет: ~$9,200</div>
+        <button class="btn-select" onclick="selectCar('Ford Focus SE', '9200')">Выбрать авто</button>
+    </div>
 
-        function filterCars(category, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    <div class="car-card" data-category="budget">
+        <div class="car-header"><div class="car-title">Ford Fusion (Дорестайл)</div></div>
+        <div class="car-price">Бюджет: ~$10,000</div>
+        <button class="btn-select" onclick="selectCar('Ford Fusion Дорестайл', '10000')">Выбрать авто</button>
+    </div>
 
-            const cards = document.querySelectorAll('.car-card');
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
+    <div class="car-card" data-category="budget">
+        <div class="car-header"><div class="car-title">Chevrolet Malibu (Дорестайл)</div></div>
+        <div class="car-price">Бюджет: ~$11,200</div>
+        <button class="btn-select" onclick="selectCar('Chevrolet Malibu Дорестайл', '11200')">Выбрать авто</button>
+    </div>
 
-        function selectCar(carName, price) {
-            tg.sendData(JSON.stringify({ car: carName, price: price }));
-        }
-    </script>
-</body>
-</html>
+    <div class="car-card" data-category="budget">
+        <div class="car-header"><div class="car-title">Hyundai Elantra / Sonata</div></div>
+        <div class="car-price">Бюджет: ~$9,500</div>
+        <button class="btn-select" onclick="selectCar('Hyundai Elantra', '9500')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="budget">
+        <div class="car-header"><div class="car-title">Kia Forte / Optima</div></div>
+        <div class="car-price">Бюджет: ~$9,800</div>
+        <button class="btn-select" onclick="selectCar('Kia Optima', '9800')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="budget">
+        <div class="car-header"><div class="car-title">Volkswagen Jetta</div></div>
+        <div class="car-price">Бюджет: ~$11,000</div>
+        <button class="btn-select" onclick="selectCar('Volkswagen Jetta', '11000')">Выбрать авто</button>
+    </div>
+
+
+    <!-- ================= СРЕДНИЙ БЮДЖЕТ ($12,000 - $20,000) ================= -->
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Chevrolet Malibu (Рестайлинг)</div></div>
+        <div class="car-price">Бюджет: ~$13,500</div>
+        <button class="btn-select" onclick="selectCar('Chevrolet Malibu Рестайлинг', '13500')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Chevrolet Equinox (Дорестайл до 2021)</div></div>
+        <div class="car-price">Бюджет: ~$13,000</div>
+        <button class="btn-select" onclick="selectCar('Chevrolet Equinox Дорестайл', '13000')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Chevrolet Equinox (Рестайлинг от 2022)</div></div>
+        <div class="car-price">Бюджет: ~$17,500</div>
+        <button class="btn-select" onclick="selectCar('Chevrolet Equinox Рестайлинг', '17500')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">GMC Terrain (Дорестайл до 2024)</div></div>
+        <div class="car-price">Бюджет: ~$18,900</div>
+        <button class="btn-select" onclick="selectCar('GMC Terrain до 2024', '18900')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Ford Mustang 2.0 EcoBoost</div></div>
+        <div class="car-price">Бюджет: ~$13,500</div>
+        <button class="btn-select" onclick="selectCar('Ford Mustang 2.0 EcoBoost', '13500')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Ford Escape / Kuga</div></div>
+        <div class="car-price">Бюджет: ~$12,800</div>
+        <button class="btn-select" onclick="selectCar('Ford Escape', '12800')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Honda Civic 1.5 Turbo</div></div>
+        <div class="car-price">Бюджет: ~$14,800</div>
+        <button class="btn-select" onclick="selectCar('Honda Civic 1.5 Turbo', '14800')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Honda Accord</div></div>
+        <div class="car-price">Бюджет: ~$16,500</div>
+        <button class="btn-select" onclick="selectCar('Honda Accord', '16500')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Toyota Camry (XV70)</div></div>
+        <div class="car-price">Бюджет: ~$19,500</div>
+        <button class="btn-select" onclick="selectCar('Toyota Camry', '19500')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Toyota RAV4</div></div>
+        <div class="car-price">Бюджет: ~$19,900</div>
+        <button class="btn-select" onclick="selectCar('Toyota RAV4', '19900')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">BMW 320i / 330i (G20)</div></div>
+        <div class="car-price">Бюджет: ~$18,200</div>
+        <button class="btn-select" onclick="selectCar('BMW 320i (G20)', '18200')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Audi A4 / A5 (B9)</div></div>
+        <div class="car-price">Бюджет: ~$17,000</div>
+        <button class="btn-select" onclick="selectCar('Audi A4', '17000')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Volkswagen Tiguan</div></div>
+        <div class="car-price">Бюджет: ~$18,500</div>
+        <button class="btn-select" onclick="selectCar('Volkswagen Tiguan', '18500')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Jeep Cherokee / Grand Cherokee</div></div>
+        <div class="car-price">Бюджет: ~$14,000</div>
+        <button class="btn-select" onclick="selectCar('Jeep Cherokee', '14000')">Выбрать авто</button>
+    </div>
+
+    <div class="car-card" data-category="mid">
+        <div class="car-header"><div class="car-title">Dodge Charger / Challenger</div></div>
+        <div class="car-price">Бюджет: ~$16,000</div>
+        <button class="btn-select" onclick="selectCar('Dodge Charger', '16000')">Выбрать авто</button>
+    </div>
